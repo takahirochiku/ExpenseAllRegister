@@ -1,0 +1,35 @@
+.sidenav-container {
+  background-color: initial;
+}
+
+md-card {
+  margin: 0.1em auto;
+}
+
+md-card-content {
+  max-width: 65em;
+  margin: 0 auto;
+}
+
+.small-class{
+  width: 12em;
+  padding-top: 1.3em;
+}
+
+.middle-class{
+  width: 20em;
+  padding-top:1.4em;
+}
+
+.tiny-class{
+  width: 5em;
+  padding-top: 1.4em;
+}
+
+.mat-select {
+  margin: 1.5em 0;
+}
+
+.button-container {
+  margin: 0 auto;
+}

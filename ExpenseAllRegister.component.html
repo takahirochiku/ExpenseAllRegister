@@ -1,0 +1,94 @@
+<app-header [title]="componentTitle" [leftnav]=sidenav></app-header>
+<md-sidenav-container class="sidenav-container" [style.height.px]="height" (window:resize)="onResize($event)">
+  <md-sidenav #sidenav>
+    <app-navbar></app-navbar>
+  </md-sidenav>
+  <md-progress-bar mode="indeterminate" color="{{backgroundColor}}" *ngIf="working"></md-progress-bar>
+
+  <md-card>
+    <md-card-content>
+      <ng-template ngFor let-detail [ngForOf]="details" let-i="index">
+        <table cellspacing="0">
+          <tr>
+            <td>
+              <md-input-container class=small-class>
+                <input mdInput type="date" required placeholder="発生日" [formControl]="detail.bookDt" />
+                <md-error *ngIf="detail.bookDt.errors?.required">
+                  必須です。
+                </md-error>
+              </md-input-container>
+            </td>
+            <td>
+              <md-input-container class=middle-class>
+                <input mdInput required placeholder="荷主" [formControl]="detail.ownerdisplayTx" onfocus="this.select()" [mdAutocomplete]="autoTxt"
+                  (blur)="detail.changeOwner($event.target.value)">
+              </md-input-container>
+              <md-autocomplete #autoTxt="mdAutocomplete">
+                <md-option *ngFor="let owner of detail.filteredOwnerOptions | async" [value]="owner.ownerdisplayTx">{{ owner.ownerdisplayTx }}</md-option>
+              </md-autocomplete>
+            </td>
+            <td>
+              <md-input-container class=middle-class>
+                <input mdInput required placeholder="項目" [formControl]="detail.salesgroupdisplayTx" onfocus="this.select()" [mdAutocomplete]="autoSalesgroupTxt"
+                  (blur)="detail.changeSalesgroup($event.target.value)">
+              </md-input-container>
+              <md-autocomplete #autoSalesgroupTxt="mdAutocomplete">
+                <md-option *ngFor="let salesgroup of detail.filteredSalesgroupOptions | async" [value]="salesgroup.salesgroupdisplayTx">
+                  {{salesgroup.salesgroupdisplayTx}}
+                </md-option>
+              </md-autocomplete>
+              <!-- <md-error *ngIf="detail.salesgroupId.errors?.required">
+                  必須です。
+                </md-error> -->
+            </td>
+            <td>
+              <md-input-container class=tiny-class>
+                <input mdInput type="number" required placeholder="数量" onfocus="this.select()" [formControl]="detail.pcsNr" />
+                <md-error *ngIf="detail.pcsNr.errors?.pattern">
+                  ０以外の数量を指定してください。
+                </md-error>
+                <md-error *ngIf="detail.pcsNr.errors?.min">
+                  -99,999以上の数量を指定してください。
+                </md-error>
+                <md-error *ngIf="detail.pcsNr.errors?.max">
+                  99,999以内の数量を指定してください。
+                </md-error>
+              </md-input-container>
+            </td>
+            <td>
+              <md-input-container class=tiny-class>
+                <input mdInput placeholder="単位" value={{detail.getSalesgroupunitTx()}} disabled/>
+              </md-input-container>
+            </td>
+            <td>
+              <md-input-container class=tiny-class>
+                <input mdInput type="number" placeholder="単価" value={{detail.getUnitpricedispNr()}} disabled/>
+              </md-input-container>
+            </td>
+            <td>
+              <md-input-container class=tiny-class>
+                <input mdInput placeholder="税区分" value={{detail.getTypetaxTx()}} disabled/>
+              </md-input-container>
+            </td>
+            <td>
+              <md-input-container class=tiny-class>
+                <input mdInput type="number" placeholder="金額" value={{detail.getPricedispNr()}} disabled/>
+              </md-input-container>
+            </td>
+          </tr>
+        </table>
+      </ng-template>
+    </md-card-content>
+  </md-card>
+  <md-card>
+    <md-card-content>
+      <div class="footer-div">
+        <button md-raised-button color="{{backgroundColor}}" [disabled]="working" (click)="addDetail(); ">
+          <md-icon>add</md-icon>
+          明細追加
+        </button>
+        <button md-raised-button color="{{backgroundColor}}" (click)="onSubmit();" [disabled]="working">OK</button>
+      </div>
+    </md-card-content>
+  </md-card>
+</md-sidenav-container>
